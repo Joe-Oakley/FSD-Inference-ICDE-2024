@@ -1,0 +1,35 @@
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+
+#!/bin/bash
+yum update -y
+cd /home/ec2-user
+python3 -m venv /home/ec2-user/venv
+source /home/ec2-user/venv/bin/activate
+pip install numpy scipy boto3 botocore
+mkdir /home/ec2-user/scripts
+mkdir /home/ec2-user/payloads
+mkdir /home/ec2-user/payloads/4096
+
+aws s3 cp s3://mnist-radixnet-server-resources/python_scripts/sds-inf-server.py /home/ec2-user/scripts/
+aws s3 cp s3://mnist-radixnet-server-resources/json_payloads/job_scoped/4096/b2_4096n_server_js_payload_run3.json /home/ec2-user/payloads/4096/
+
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/4096/b2_4096n_server_js_payload_run3.json'
+
+sudo shutdown now -h
