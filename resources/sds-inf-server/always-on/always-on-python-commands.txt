@@ -1,0 +1,15 @@
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/1024/b1_1024n_server_ao_payload_run1.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/1024/b1_1024n_server_ao_payload_run2.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/1024/b1_1024n_server_ao_payload_run3.json'
+
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/4096/b2_4096n_server_ao_payload_run1.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/4096/b2_4096n_server_ao_payload_run2.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/4096/b2_4096n_server_ao_payload_run3.json'
+
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/16384/b3_16384n_server_ao_payload_run1.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/16384/b3_16384n_server_ao_payload_run2.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/16384/b3_16384n_server_ao_payload_run3.json'
+
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/65536/b4_65536n_server_ao_payload_run1.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/65536/b4_65536n_server_ao_payload_run2.json'
+python3 scripts/sds-inf-server.py --jsonloc 'payloads/65536/b4_65536n_server_ao_payload_run3.json'
