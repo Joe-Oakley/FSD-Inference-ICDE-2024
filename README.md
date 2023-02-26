@@ -24,8 +24,8 @@ To run SDS-Inf, you will require:
 ## SDS-Inf-Queue/SDS-Inf-Object/SDS-Inf-Serial
 1. Create IAM roles with the following policies:
     - Role for all workers (Queue/Object/Serial):
-        - A policy to enable Lambda to write to S3
-        - A policy to enable a given Lambda function to invoke other Lambda functions
+        - A policy to enable Lambda to write to S3 (/resources/IAM Custom Policies/lambda-s3-access-policy.json)
+        - A policy to enable a given Lambda function to invoke other Lambda functions (/resources/IAM Custom Policies/invoke-other-lambdas-policy.json)
         - SQSFullAccess
         - S3FullAccess
         - CloudWatchFullAccess
