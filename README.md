@@ -1,8 +1,8 @@
-# SDS-Inf
-SDS-Inf (Serverless Distributed Sparse Inference) 
+# FSD-Inf
+FSD-Inf (Fully Serverless Distributed Inference) 
 
 # Prerequisites
-To run SDS-Inf, you will require:
+To run FSD-Inf, you will require:
 - An AWS account
 - The AWS CLI to be installed (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). 
 - The AWS CLI must be configured to connect to your AWS account (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
@@ -18,10 +18,10 @@ To run SDS-Inf, you will require:
     - Weights data
     - Connectivity data
     - Metric outputs
-    - Intermediate results data (SDS-Inf-Object)
-    - Server resources (SDS-Inf-Server)
+    - Intermediate results data (FSD-Inf-Object)
+    - Server resources (FSD-Inf-Server)
 
-## SDS-Inf-Queue/SDS-Inf-Object/SDS-Inf-Serial
+## FSD-Inf-Queue/FSD-Inf-Object/FSD-Inf-Serial
 1. Create IAM roles with the following policies:
     - Role for all workers (Queue/Object/Serial):
         - A policy to enable Lambda to write to S3 (/resources/IAM Custom Policies/lambda-s3-access-policy.json)
@@ -40,9 +40,9 @@ To run SDS-Inf, you will require:
 
     Note that in a production environment, you should instead use more restrictive access policies.
 
-2. (SDS-Inf-Queue only) Set up communication resources by running create_pub_sub_resources.py and create_dynamodb_table.py, both of which are in /scripts. Note that the current version of the SDS-Inf-Queue code requires a DynamoDB table, but this was only required for performance reasons in earlier iterations of the code. It could now be removed with little to no performance impact, however it was in place for the experiments so has been retained for this submission.
+2. (FSD-Inf-Queue only) Set up communication resources by running create_pub_sub_resources.py and create_dynamodb_table.py, both of which are in /scripts. Note that the current version of the SDS-Inf-Queue code requires a DynamoDB table, but this was only required for performance reasons in earlier iterations of the code. It could now be removed with little to no performance impact, however it was in place for the experiments so has been retained for this submission.
 
-3. Create Lambda SAM applications with Python 3.8 for SDS-Inf-Queue worker/coordinator, SDS-Inf-Object worker/coordinator, and SDS-Inf-Serial worker.
+3. Create Lambda SAM applications with Python 3.8 for FSD-Inf-Queue worker/coordinator, FSD-Inf-Object worker/coordinator, and FSD-Inf-Serial worker.
 
 4. Copy the relevant Python code from /src/X/ into the Lambda application.
 
@@ -50,9 +50,9 @@ To run SDS-Inf, you will require:
 
 6. Deploy the worker Lambda function(s). 
 
-7. (SDS-Inf-Queue/SDS-Inf-Object) Update the constant SPARSE_DNN_WORKER with the ARN of the deployed worker function, in both the relevant worker and coordinator. 
+7. (FSD-Inf-Queue/FSD-Inf-Object) Update the constant SPARSE_DNN_WORKER with the ARN of the deployed worker function, in both the relevant worker and coordinator. 
 
-8. (SDS-Inf-Queue/SDS-Inf-Object) Deploy coordinator and re-deploy worker.
+8. (FSD-Inf-Queue/FSD-Inf-Object) Deploy coordinator and re-deploy worker.
 
 9. Configure Lambda function memory, max runtime, max concurrency as desired. Under "Asynchronous Invocation", we recommend:
 
@@ -61,13 +61,13 @@ To run SDS-Inf, you will require:
     - Dead-letter queue service: None
 
 10. Upload the inference data, weights data and connectivity data from /resources/data to the relevant buckets. The bucket folder structure can follow the examples in any of the invocation payloads, e.g. c1_1024n_8w_10000bs_payload_queue in /resources/sds-inf-queue/.
-- For SDS-Inf-Serial, use files in /resources/data/serial/
-- For SDS-Inf-Queue and SDS-Inf-Object, use files in /resources/data/parallel
-- Final metrics will be written to the metric output bucket. SDS-Inf-Object inter-function messages will be sent via the intermediate results data bucket. 
+- For FSD-Inf-Serial, use files in /resources/data/serial/
+- For FSD-Inf-Queue and FSD-Inf-Object, use files in /resources/data/parallel
+- Final metrics will be written to the metric output bucket. FSD-Inf-Object inter-function messages will be sent via the intermediate results data bucket. 
 
-11. To begin SDS-Inf execution (either Queue or Object), invoke the relevant coordinator function. This can be done either using the AWS CLI or via AWS Console. Example .json invocation payloads are given in /resources/sds-inf-object and /resources/sds-inf-queue. As well as the metrics output bucket, results can also be seen in the CloudWatch log of the worker functions. We provide example metrics and layerstats files in /resources (these are the median of 3 runs). For SDS-Inf-Serial execution, simply invoke the worker function directly with the appropriate payload.
+11. To begin FSD-Inf execution (either Queue or Object), invoke the relevant coordinator function. This can be done either using the AWS CLI or via AWS Console. Example .json invocation payloads are given in /resources/sds-inf-object and /resources/sds-inf-queue. As well as the metrics output bucket, results can also be seen in the CloudWatch log of the worker functions. We provide example metrics and layerstats files in /resources (these are the median of 3 runs). For FSD-Inf-Serial execution, simply invoke the worker function directly with the appropriate payload.
 
-## SDS-Inf-Server (Baseline)
+## FSD-Inf-Server (Baseline)
 1. Create an IAM role for EC2, with the lambda-s3-access-policy.json from /resources/IAM Custom Policies, as well as AmazonEC2FullAccess, AmazonS3FullAccess, CloudWatchFullAccess
 
 2. Upload inference and weights data to pre-created buckets, as well as selected payloads (from /resources/sds-inf-server/X/payloads/) to the server resources buckets.
